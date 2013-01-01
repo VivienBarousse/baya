@@ -6,4 +6,5 @@ gem "yajl-ruby", "1.1.0"
 
 group :development do
   gem "rspec", "2.12.0"
+  gem "simplecov", "0.7.1"
 end
