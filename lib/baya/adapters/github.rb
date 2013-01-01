@@ -38,8 +38,6 @@ module Baya
           "users/#{@config['user']}/repos"
         elsif @config['org']
           "orgs/#{@config['org']}/repos"
-        else
-          raise "`user` or `org` is required"
         end
       end
 
