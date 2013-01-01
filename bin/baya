@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+ROOT = File.expand_path('../../lib', __FILE__)
+
+require ROOT + '/baya'
+
+b = Baya::Binaries::Baya.new(ARGV)
+b.run
