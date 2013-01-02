@@ -6,8 +6,13 @@ module Baya
     end
 
     def run
-      adapters = @config.adapters.each do |a|
-        adapter = Adapters.from_name(a.type).new(a.config)
+      @config.adapters.each do |a|
+        if klass = Adapters.from_name(a.type)
+          adapter = klass.new(a.config)
+        else
+          raise "Unknown adapter `#{a.type}`" unless adapter
+        end
+
         case a.mode
         when 'archive'
           adapter.archive(@config.root)
