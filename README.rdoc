@@ -1,0 +1,123 @@
+= Baya - Simple backup and archive automation tool
+
+Baya is a tool aiming at making it easy to archive and backup all kind of
+data, from a vast variety of places.
+
+At the moment, Baya supports archives from the following:
+
+* Git repositories
+* Github accounts
+* Local and remote machines via rsync
+
+== Usage
+
+Baya aims at being simple to use. Just typing
+
+    baya
+
+should be enough in most cases.
+
+The command will by default load its configuration from the `baya.json` file.
+
+You can specify the location of the configuration file to use:
+
+    baya --config my_config.json
+    baya -c my_config.json
+
+To see all available options, consult the command line help:
+
+    baya --help
+    baya -h
+
+== Configuration
+
+The configuration is writen in a single JSON file, and is built around the
+following concepts:
+
+* All backups are stored in a dedicated folder. All data will be stored in
+subfolders from that root folder.
+* Adapters are the basic storage unit. You can specify a list of adapters that
+will represent all the data sources you want to backup. For example, all the
+following are individual adapters you could configure independently:
+  * A Git repository
+  * A single Github account
+  * One remore repository
+
+The JSON configuration document is structured in the following way:
+
+    {
+      "root": "The root backup folder",
+      "adapters": [
+        {
+          "type": "The adapter type. Can be `git`, `github` or `rsync`",
+          "mode": "`archive` or `backup`. At the moment, only `archive` is supported",
+          "config": {
+            // Adapter-specific cofiguration
+          }
+        }
+      ]
+    }
+
+=== Git adapter
+
+The Git adapter accepts two arguments, and both are mandatory:
+
+    {
+      "type": "git",
+      "mode": "`archive` or `backup`",
+      "config": {
+        "origin": "The Git origin to clone from",
+        "destination": "The backup destination, relative to the global root"
+      }
+    }
+
+=== Github adapter
+
+The Github adapter has three parameters:
+
+* `user` specifies a user account to backup Git repositories from.
+* `org` is used when you want to backup Git repositories from an origanisation
+instead of a user account.
+* `destination` is the backup destination folder, relative to the global root.
+
+The `user` and `org` parameters are mutually exclusive, and one of them is
+required. The `destination` parameter is always required.
+
+Note: Due to a limitation in the current implementation, only public
+repositories are backed up at the moment.
+
+=== Rsync adapter
+
+In archive mode, the `rsync` adapter accepts only two parameters. Both are
+mandatory:
+
+* `source` specifies where to copy from. You can use any rsync compliant
+syntax to specify remote folders.
+* `destination` is the backup destination, relative to the root folder.
+
+In archive mode (the only supported at the moment), rsync will be invoked
+with the `-az` flags to perform the archive operation. This will enable
+compression when copying data over the network and the rsync "archive" mode.
+
+== License
+
+The MIT License
+
+Copyright (c) 2013 - Vivien Barousse
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
