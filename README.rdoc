@@ -95,9 +95,18 @@ mandatory:
 syntax to specify remote folders.
 * `destination` is the backup destination, relative to the root folder.
 
-In archive mode (the only supported at the moment), rsync will be invoked
-with the `-az` flags to perform the archive operation. This will enable
-compression when copying data over the network and the rsync "archive" mode.
+In archive mode, rsync will be invoked with the `-az` flags to perform the
+archive operation. This will enable compression when copying data over the 
+network and the rsync "archive" mode.
+
+In backup mode, rsync will be invoked with the following arguments:
+
+* `-az` to archive all assets using compression over the wire
+* `--delete` to delete old assets
+* `--link-dest=previous_backup` to hard link unchanged files instead of 
+copying them. This is in order to save disk space.
+* A timestamp will be added to the destination folder, in order to create a
+different snapshot for every run
 
 == License
 

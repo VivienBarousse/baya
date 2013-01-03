@@ -16,6 +16,8 @@ module Baya
         case a.mode
         when 'archive'
           adapter.archive(@config.root)
+        when 'backup'
+          adapter.backup(@config.root)
         else
           raise "Unknown mode `#{a.mode}` for adapter `#{a.type}`"
         end

@@ -16,19 +16,51 @@ module Baya
         rsync_archive(source, target)
       end
 
+      def backup(root)
+        target = root + "/" + @config['destination']
+        source = @config['source']
+        date = Time.now.strftime("%Y%m%d%H%M%S")
+
+        previous = Dir[target + "/*/"].sort_by { |a| File.basename(a) }
+
+        rsync_backup(source, target + "/" + date, previous.last)
+      end
+
       private
 
       def rsync_archive(source, target)
-        if File.exist?(target) && !File.directory?(target)
-          raise "`destination` already exists, and is not a directory"
-        end
-        unless File.exist?(target)
-          FileUtils.mkdir_p(target)
-        end
+        check_folder(target, "destination")
         Open3.popen3("rsync", "-az", source, target) do |i, o, e, process|
           if process.value != 0
             raise "Non-zero value from `rsync`."
           end
+        end
+      end
+
+      def rsync_backup(source, target, link)
+        check_folder(target, "destination")
+        options = [
+          "rsync",
+          "-az",
+          "--delete",
+          source,
+          target
+        ]
+        options << "--link-dest=#{link}" if link
+
+        Open3.popen3(*options) do |i, o, e, process|
+          if process.value != 0
+            raise "Non-zero value from `rsync`."
+          end
+        end
+      end
+
+      def check_folder(dir, name)
+        if File.exist?(dir) && !File.directory?(dir)
+          raise "`#{name}` already exists, and is not a directory"
+        end
+        unless File.exist?(dir)
+          FileUtils.mkdir_p(dir)
         end
       end
 
