@@ -1,6 +1,6 @@
 spec = Gem::Specification.new do |s|
   s.name = "baya"
-  s.version = "0.1.0"
+  s.version = "0.1.1"
   s.summary = "Simple backup and archive automation tool"
   s.author = "Vivien Barousse"
   s.email = "barousse.vivien@gmail.com"

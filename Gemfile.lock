@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    baya (0.1.0)
+    baya (0.1.1)
       curb (= 0.8.3)
       git (= 1.2.5)
       yajl-ruby (= 1.1.0)
