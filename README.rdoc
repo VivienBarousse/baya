@@ -35,10 +35,10 @@ The configuration is writen in a single JSON file, and is built around the
 following concepts:
 
 * All backups are stored in a dedicated folder. All data will be stored in
-subfolders from that root folder.
+  subfolders from that root folder.
 * Adapters are the basic storage unit. You can specify a list of adapters that
-will represent all the data sources you want to backup. For example, all the
-following are individual adapters you could configure independently:
+  will represent all the data sources you want to backup. For example, all the
+  following are individual adapters you could configure independently:
   * A Git repository
   * A single Github account
   * One remore repository
@@ -77,7 +77,7 @@ The Github adapter has three parameters:
 
 * `user` specifies a user account to backup Git repositories from.
 * `org` is used when you want to backup Git repositories from an origanisation
-instead of a user account.
+  instead of a user account.
 * `destination` is the backup destination folder, relative to the global root.
 
 The `user` and `org` parameters are mutually exclusive, and one of them is
@@ -92,7 +92,7 @@ In archive mode, the `rsync` adapter accepts only two parameters. Both are
 mandatory:
 
 * `source` specifies where to copy from. You can use any rsync compliant
-syntax to specify remote folders.
+  syntax to specify remote folders.
 * `destination` is the backup destination, relative to the root folder.
 
 In archive mode, rsync will be invoked with the `-az` flags to perform the
@@ -104,9 +104,9 @@ In backup mode, rsync will be invoked with the following arguments:
 * `-az` to archive all assets using compression over the wire
 * `--delete` to delete old assets
 * `--link-dest=previous_backup` to hard link unchanged files instead of 
-copying them. This is in order to save disk space.
+  copying them. This is in order to save disk space.
 * A timestamp will be added to the destination folder, in order to create a
-different snapshot for every run
+  different snapshot for every run
 
 == License
 
