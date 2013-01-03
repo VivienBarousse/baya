@@ -2,7 +2,26 @@ module Baya
   module Configuration
     class File
       require 'yajl'
-      require 'ostruct'
+
+      class AdapterConfig
+
+        def initialize(hash)
+          @hash = hash
+        end
+
+        def type
+          @hash['type']
+        end
+
+        def mode
+          @hash['mode']
+        end
+
+        def config
+          @hash['config']
+        end
+
+      end
 
       def initialize(file)
         json = ::File.open(file).read
@@ -15,11 +34,7 @@ module Baya
 
       def adapters
         (@data['adapters'] || []).map do |a|
-          adapter = OpenStruct.new
-          adapter.type = a["type"]
-          adapter.mode = a["mode"]
-          adapter.config = a["config"]
-          adapter
+          AdapterConfig.new(a)
         end
       end
 
