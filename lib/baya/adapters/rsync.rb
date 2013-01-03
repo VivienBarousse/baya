@@ -24,6 +24,15 @@ module Baya
         previous = Dir[target + "/*/"].sort_by { |a| File.basename(a) }
 
         rsync_backup(source, target + "/" + date, previous.last)
+
+        if keep = @config['keepBackups'] && @config['keepBackups'].to_i
+          if previous.count - keep > 0
+            to_delete = previous[0..previous.count - keep]
+            to_delete.each do |f|
+              FileUtils.rmtree(f)
+            end
+          end
+        end
       end
 
       private

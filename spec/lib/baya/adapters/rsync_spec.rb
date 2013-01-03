@@ -18,6 +18,7 @@ describe Baya::Adapters::Rsync do
     File.stub(:exist?)
     File.stub(:directory?)
     FileUtils.stub(:mkdir_p)
+    FileUtils.stub(:rmtree)
     Open3.stub(:popen3)
   end
 
@@ -258,6 +259,43 @@ describe Baya::Adapters::Rsync do
           proc {
             subject.backup("/my/root")
           }.should raise_exception
+        end
+      end
+    end
+
+    context "when the maximum number of backups to keep is specified" do
+      before do
+        config['keepBackups'] = 3
+      end
+
+      context "and backups need to be deleted" do
+        let(:previous) do
+          [
+            "/my/root/my/dest/20130101",
+            "/my/root/my/dest/20130102",
+            "/my/root/my/dest/20130103",
+            "/my/root/my/dest/20130104"
+          ]
+        end
+
+        it "should remove the two oldest folders" do
+          FileUtils.should_receive(:rmtree).with("/my/root/my/dest/20130101")
+          FileUtils.should_receive(:rmtree).with("/my/root/my/dest/20130102")
+          subject.backup("/my/root")
+        end
+      end
+
+      context "and no backups need to be deleted" do
+        let(:previous) do
+          [
+            "/my/root/my/dest/20130101",
+            "/my/root/my/dest/20130102"
+          ]
+        end
+
+        it "should not remove any folder" do
+          FileUtils.should_not_receive(:rmtree)
+          subject.backup("/my/root")
         end
       end
     end
