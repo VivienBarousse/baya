@@ -10,7 +10,7 @@ module Baya
       end
 
       def root
-        @data['root']
+        @root ||= ::File.expand_path(@data['root'])
       end
 
       def adapters

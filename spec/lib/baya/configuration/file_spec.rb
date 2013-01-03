@@ -86,6 +86,29 @@ describe Baya::Configuration::File do
         }
       ]
     end
+
+    context "when the root is a relative folder" do
+      let(:json) do
+        <<-JSON
+          {
+            "root": "./path"
+          }
+        JSON
+      end
+
+      before do
+        ::File.stub(:expand_path).and_return("/my/full/path")
+      end
+
+      it "should try to expand the path" do
+        ::File.should_receive(:expand_path).with('./path')
+        subject.root
+      end
+
+      it "should return the expanded path" do
+        subject.root.should == "/my/full/path"
+      end
+    end
   end
 
 end
