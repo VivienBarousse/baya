@@ -1,6 +1,7 @@
-require 'simplecov'
-
-SimpleCov.start if ENV['COVERAGE']
+if ENV['COVERAGE']
+  require 'simplecov'
+  SimpleCov.start
+end
 
 ROOT = File.expand_path('../../lib', __FILE__)
 
