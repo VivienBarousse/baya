@@ -9,6 +9,12 @@ At the moment, Baya supports archives from the following:
 * Github accounts
 * Local and remote machines via rsync
 
+== Installation
+
+Baya is available on Rubygems. You can install it by simply running:
+
+    gem install baya
+
 == Usage
 
 Baya aims at being simple to use. Just typing
