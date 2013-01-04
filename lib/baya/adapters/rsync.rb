@@ -40,7 +40,16 @@ module Baya
       def rsync_archive(source, target)
         check_folder(target, "destination")
         Open3.popen3("rsync", "-az", source, target) do |i, o, e, process|
-          if process.value != 0
+          rsync_value = process.value
+
+          o.each_line do |l|
+            STDOUT.puts "rsync: #{l}"
+          end
+          e.each_line do |l|
+            STDERR.puts "rsync: #{l}"
+          end
+
+          if rsync_value != 0
             raise "Non-zero value from `rsync`."
           end
         end
@@ -58,6 +67,15 @@ module Baya
         options << "--link-dest=#{link}" if link
 
         Open3.popen3(*options) do |i, o, e, process|
+          process.value
+
+          o.each_line do |l|
+            STDOUT.puts "rsync: #{l}"
+          end
+          e.each_line do |l|
+            STDERR.puts "rsync: #{l}"
+          end
+
           if process.value != 0
             raise "Non-zero value from `rsync`."
           end

@@ -10,6 +10,14 @@ describe Baya::Adapters::Rsync do
     }
   end
 
+  let(:rsync_out) do
+    "OUT1\nOUT2"
+  end
+
+  let(:rsync_err) do
+    "ERR1\nERR2"
+  end
+
   subject do
     described_class.new(config)
   end
@@ -20,6 +28,8 @@ describe Baya::Adapters::Rsync do
     FileUtils.stub(:mkdir_p)
     FileUtils.stub(:rmtree)
     Open3.stub(:popen3)
+    STDOUT.stub(:puts)
+    STDERR.stub(:puts)
   end
 
   describe "#archive" do
@@ -38,8 +48,8 @@ describe Baya::Adapters::Rsync do
       before do
         Open3.stub(:popen3).and_yield(
           nil,
-          nil,
-          nil,
+          rsync_out,
+          rsync_err,
           stub(:popen3, :value => 0))
       end
 
@@ -48,14 +58,26 @@ describe Baya::Adapters::Rsync do
           subject.archive("/my/root")
         }.should_not raise_exception
       end
+
+      it "should copy STDOUT over" do
+        STDOUT.should_receive(:puts).with(/OUT1/)
+        STDOUT.should_receive(:puts).with(/OUT2/)
+        subject.archive("/my/root")
+      end
+
+      it "should copy STDERR over" do
+        STDERR.should_receive(:puts).with(/ERR1/)
+        STDERR.should_receive(:puts).with(/ERR2/)
+        subject.archive("/my/root")
+      end
     end
 
     context "when rsync fails miserably" do
       before do
         Open3.stub(:popen3).and_yield(
           nil,
-          nil,
-          nil,
+          rsync_out,
+          rsync_err,
           stub(:popen3, :value => 1))
       end
 
@@ -63,6 +85,18 @@ describe Baya::Adapters::Rsync do
         proc {
           subject.archive("/my/root")
         }.should raise_exception
+      end
+
+      it "should copy STDOUT over" do
+        STDOUT.should_receive(:puts).with(/OUT1/)
+        STDOUT.should_receive(:puts).with(/OUT2/)
+        subject.archive("/my/root") rescue nil
+      end
+
+      it "should copy STDERR over" do
+        STDERR.should_receive(:puts).with(/ERR1/)
+        STDERR.should_receive(:puts).with(/ERR2/)
+        subject.archive("/my/root") rescue nil
       end
     end
 
@@ -234,8 +268,8 @@ describe Baya::Adapters::Rsync do
         before do
           Open3.stub(:popen3).and_yield(
             nil,
-            nil,
-            nil,
+            rsync_out,
+            rsync_err,
             stub(:popen3, :value => 0)
           )
         end
@@ -243,14 +277,26 @@ describe Baya::Adapters::Rsync do
         it "should complete successfuly" do
           subject.backup("/my/root")
         end
+
+        it "should copy STDOUT over" do
+          STDOUT.should_receive(:puts).with(/OUT1/)
+          STDOUT.should_receive(:puts).with(/OUT2/)
+          subject.archive("/my/root")
+        end
+
+        it "should copy STDERR over" do
+          STDERR.should_receive(:puts).with(/ERR1/)
+          STDERR.should_receive(:puts).with(/ERR2/)
+          subject.archive("/my/root")
+        end
       end
 
       context "when rsync fails miserably" do
         before do
           Open3.stub(:popen3).and_yield(
             nil,
-            nil,
-            nil,
+            rsync_out,
+            rsync_err,
             stub(:popen3, :value => 1)
           )
         end
@@ -259,6 +305,18 @@ describe Baya::Adapters::Rsync do
           proc {
             subject.backup("/my/root")
           }.should raise_exception
+        end
+
+        it "should copy STDOUT over" do
+          STDOUT.should_receive(:puts).with(/OUT1/)
+          STDOUT.should_receive(:puts).with(/OUT2/)
+          subject.archive("/my/root") rescue nil
+        end
+
+        it "should copy STDERR over" do
+          STDERR.should_receive(:puts).with(/ERR1/)
+          STDERR.should_receive(:puts).with(/ERR2/)
+          subject.archive("/my/root") rescue nil
         end
       end
     end
