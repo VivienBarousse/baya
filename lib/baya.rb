@@ -1,5 +1,5 @@
 module Baya
-  VERSION = '0.1.1'
+  VERSION = '0.1.2'
 
   ROOT = File.expand_path('..', __FILE__)
   require ROOT + "/baya/adapters"
