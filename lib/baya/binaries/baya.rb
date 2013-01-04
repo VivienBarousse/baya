@@ -29,7 +29,11 @@ module Baya
         @config = Configuration::File.new(@args.config)
 
         runner = Runner.new(@config)
-        runner.run
+        begin
+          runner.run
+        rescue => e
+          err.puts "Error: #{e.message}"
+        end
       end
 
       def out
