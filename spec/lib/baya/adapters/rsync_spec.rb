@@ -173,6 +173,23 @@ describe Baya::Adapters::Rsync do
         subject.archive("/my/root") rescue nil
       end
     end
+
+    context "under Ruby 1.8" do
+      before do
+        # Ruby 1.8 yields only 3 arguments to popen3 instead of 4
+        Open3.stub(:popen3).and_yield(
+          nil,
+          rsync_out,
+          rsync_err,
+          nil)
+      end
+
+      it "should not fail" do
+        proc {
+          subject.archive("/my/root")
+        }.should_not raise_exception
+      end
+    end
   end
 
   describe "#backup" do
@@ -390,6 +407,23 @@ describe Baya::Adapters::Rsync do
           FileUtils.should_not_receive(:rmtree)
           subject.backup("/my/root")
         end
+      end
+    end
+
+    context "under Ruby 1.8" do
+      before do
+        # Ruby 1.8 yields only 3 arguments to popen3 instead of 4
+        Open3.stub(:popen3).and_yield(
+          nil,
+          rsync_out,
+          rsync_err,
+          nil)
+      end
+
+      it "should not fail" do
+        proc {
+          subject.backup("/my/root")
+        }.should_not raise_exception
       end
     end
   end

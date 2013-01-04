@@ -42,7 +42,7 @@ module Baya
         options = "-az"
         options += 'v' if @config['verbose']
         Open3.popen3("rsync", options, source, target) do |i, o, e, process|
-          rsync_value = process.value
+          process && process.value
 
           o.each_line do |l|
             STDOUT.puts "rsync: #{l}"
@@ -51,7 +51,7 @@ module Baya
             STDERR.puts "rsync: #{l}"
           end
 
-          if rsync_value != 0
+          if process && process.value != 0
             raise "Non-zero value from `rsync`."
           end
         end
@@ -70,7 +70,7 @@ module Baya
         options << "-v" if @config['verbose']
 
         Open3.popen3(*options) do |i, o, e, process|
-          process.value
+          process && process.value
 
           o.each_line do |l|
             STDOUT.puts "rsync: #{l}"
@@ -79,7 +79,7 @@ module Baya
             STDERR.puts "rsync: #{l}"
           end
 
-          if process.value != 0
+          if process && process.value != 0
             raise "Non-zero value from `rsync`."
           end
         end
