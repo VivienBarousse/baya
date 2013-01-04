@@ -44,6 +44,23 @@ describe Baya::Adapters::Rsync do
       subject.archive("/my/root")
     end
 
+    context "when the verbose option is given" do
+      before do
+        config['verbose'] = true
+      end
+
+      it "should call rsync with the right options" do
+        Open3.should_receive(:popen3).
+          with(
+            "rsync",
+            "-azv",
+            "user@example.com:/foo/bar",
+            "/my/root/my/dest"
+          )
+        subject.archive("/my/root")
+      end
+    end
+
     context "when rsync returns successfuly" do
       before do
         Open3.stub(:popen3).and_yield(
@@ -190,6 +207,24 @@ describe Baya::Adapters::Rsync do
           "/my/root/my/dest/#{current}"
         )
         subject.backup("/my/root")
+      end
+
+      context "when the verbose option is given" do
+        before do
+          config['verbose'] = true
+        end
+
+        it "should call rsync to do the sync" do
+          Open3.should_receive(:popen3).with(
+            "rsync",
+            "-az",
+            "--delete",
+            "user@example.com:/foo/bar",
+            "/my/root/my/dest/#{current}",
+            "-v"
+          )
+          subject.backup("/my/root")
+        end
       end
     end
 

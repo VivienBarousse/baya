@@ -94,8 +94,7 @@ repositories are backed up at the moment.
 
 === Rsync adapter
 
-In archive mode, the `rsync` adapter accepts only two parameters. Both are
-mandatory:
+In archive mode, the `rsync` adapter requires two mandatory parameters:
 
 * `source` specifies where to copy from. You can use any rsync compliant
   syntax to specify remote folders.
@@ -113,6 +112,11 @@ In backup mode, rsync will be invoked with the following arguments:
   copying them. This is in order to save disk space.
 * A timestamp will be added to the destination folder, in order to create a
   different snapshot for every run
+
+The Rsync adapter also accepts the following optional options:
+
+* `verbose`: If set to something different than `null` or `false`, this option
+  will enable the verbose mode on the `rsync` subprocess.
 
 == License
 

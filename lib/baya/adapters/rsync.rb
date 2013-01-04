@@ -39,7 +39,9 @@ module Baya
 
       def rsync_archive(source, target)
         check_folder(target, "destination")
-        Open3.popen3("rsync", "-az", source, target) do |i, o, e, process|
+        options = "-az"
+        options += 'v' if @config['verbose']
+        Open3.popen3("rsync", options, source, target) do |i, o, e, process|
           rsync_value = process.value
 
           o.each_line do |l|
@@ -65,6 +67,7 @@ module Baya
           target
         ]
         options << "--link-dest=#{link}" if link
+        options << "-v" if @config['verbose']
 
         Open3.popen3(*options) do |i, o, e, process|
           process.value
