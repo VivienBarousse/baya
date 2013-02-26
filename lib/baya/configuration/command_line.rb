@@ -11,7 +11,7 @@ module Baya
       }
 
       def initialize(args)
-        super
+        super()
         DEFAULTS.each do |k, v|
           self.send(:"#{k}=", v)
         end
