@@ -18,6 +18,6 @@ spec = Gem::Specification.new do |s|
   s.add_dependency "curb", "0.8.3"
   s.add_dependency "yajl-ruby", "1.1.0"
 
-  s.add_development_dependency "rspec", "2.12.0"
+  s.add_development_dependency "rspec", "2.13.0"
   s.add_development_dependency "simplecov", "0.7.1"
 end
