@@ -13,6 +13,7 @@ GEM
     diff-lcs (1.2.1)
     git (1.2.5)
     multi_json (1.6.1)
+    rake (10.0.3)
     rspec (2.13.0)
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
@@ -32,5 +33,6 @@ PLATFORMS
 
 DEPENDENCIES
   baya!
+  rake (= 10.0.3)
   rspec (= 2.13.0)
   simplecov (= 0.7.1)
