@@ -23,7 +23,9 @@ module Baya
 
       def repos
         api_url = API_ROOT + target
-        http = Curl.get(api_url)
+        http = Curl.get(api_url) do |http|
+          http.useragent = "baya"
+        end
         json = http.body_str
         data = Yajl::Parser.parse(json)
 

@@ -94,6 +94,12 @@ describe Baya::Adapters::Github do
       JSON
     end
 
+    let(:curl_config) do
+      mock(
+        :useragent= => "baya"
+      )
+    end
+
     let(:curl_response) do
       mock(
         :body_str => repos,
@@ -105,6 +111,7 @@ describe Baya::Adapters::Github do
       before do
         Curl.stub(:get).
              with('https://api.github.com/users/VivienBarousse/repos').
+             and_yield(curl_config).
              and_return(curl_response)
       end
 
@@ -113,6 +120,11 @@ describe Baya::Adapters::Github do
           "ssh://my.imaginart.repo/number/one",
           "ssh://my.imaginart.repo/number/two"
         ]
+      end
+
+      it "should set the user agent" do
+        curl_config.should_receive(:useragent=).with('baya')
+        subject.repos
       end
     end
 
@@ -122,6 +134,7 @@ describe Baya::Adapters::Github do
         config['org'] = 'songkick'
         Curl.stub(:get).
              with('https://api.github.com/orgs/songkick/repos').
+             and_yield(curl_config).
              and_return(curl_response)
       end
 
@@ -130,6 +143,11 @@ describe Baya::Adapters::Github do
           "ssh://my.imaginart.repo/number/one",
           "ssh://my.imaginart.repo/number/two"
         ]
+      end
+
+      it "should set the user agent" do
+        curl_config.should_receive(:useragent=).with('baya')
+        subject.repos
       end
     end
   end
