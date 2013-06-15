@@ -118,6 +118,16 @@ The Rsync adapter also accepts the following optional options:
 * `verbose`: If set to something different than `null` or `false`, this option
   will enable the verbose mode on the `rsync` subprocess.
 
+== Ruby versions
+
+baya had been tested on the following versions of Ruby:
+
+* RMI
+  * 1.8.7
+  * 1.9.2
+  * 1.9.3
+  * 2.0.0
+
 == License
 
 The MIT License
