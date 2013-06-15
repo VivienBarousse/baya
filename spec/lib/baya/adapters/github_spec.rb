@@ -95,7 +95,10 @@ describe Baya::Adapters::Github do
     end
 
     let(:curl_response) do
-      mock(:body_str => repos)
+      mock(
+        :body_str => repos,
+        :response_code => 200
+      )
     end
 
     context "with a user" do

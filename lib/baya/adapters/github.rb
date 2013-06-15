@@ -26,6 +26,14 @@ module Baya
         http = Curl.get(api_url)
         json = http.body_str
         data = Yajl::Parser.parse(json)
+
+        unless http.response_code == 200
+          if data["message"]
+            raise "Github remote error: #{data["message"]}"
+          end
+          raise "Unknown remote error from Github"
+        end
+
         data.map do |repo|
           repo['clone_url']
         end
