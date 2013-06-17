@@ -66,7 +66,7 @@ The JSON configuration document is structured in the following way:
 
 === Git adapter
 
-The Git adapter accepts two arguments, and both are mandatory:
+The Git adapter requires at least two arguments:
 
     {
       "type": "git",
@@ -74,6 +74,19 @@ The Git adapter accepts two arguments, and both are mandatory:
       "config": {
         "origin": "The Git origin to clone from",
         "destination": "The backup destination, relative to the global root"
+      }
+    }
+
+By default, the Git adapter creates bare repositories when cloning. You can
+change that behaviour using the 'bare' option:
+
+    {
+      "type": "git",
+      "mode": "`archive` or `backup`",
+      "config": {
+        "origin": "The Git origin to clone from",
+        "destination": "The backup destination, relative to the global root",
+        "bare": false
       }
     }
 
